@@ -15,14 +15,17 @@ import java.util.List;
 @RestController
 public class HelloController {
 
-    @Autowired
-    private CarMapper carMapper;
-
     @RequestMapping("/")
     public String index() {
 
-        Car car =  carMapper.search("别摸我",null).iterator().next();
-        return "Greetings from Spring Boot!" + car;
+        return "Greetings from Spring Boot!";
+    }
+
+
+    @RequestMapping("/add")
+    public String add() {
+
+        return "add success";
     }
 
 

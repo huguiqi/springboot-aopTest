@@ -95,8 +95,20 @@ The spring-aop module provides an AOP Alliance-compliant aspect-oriented program
 
 看关键字，`the @AspectJ style`,用的是AspectJ的风格。
 
+而他的实现是eclipse社区实现的：
+
+>> @AspectJ refers to a style of declaring aspects as regular Java classes annotated with annotations. The @AspectJ style was introduced by the AspectJ project as part of the AspectJ 5 release. Spring interprets the same annotations as AspectJ 5, using a library supplied by AspectJ for pointcut parsing and matching. The AOP runtime is still pure Spring AOP though, and there is no dependency on the AspectJ compiler or weaver.
+https://www.eclipse.org/aspectj/
+
+用的是eclipse的aspectJ的5.0 Reliase版本。
+
+
+[AspectJ的介绍](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-ataspectj)
 
 [springAOP官网介绍](https://docs.spring.io/spring/docs/4.3.12.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#aop-introduction)
+
+[eclipse的AspectJ](https://www.eclipse.org/aspectj/)
+
 
 
 ## aspectJ什么风格？
@@ -110,6 +122,13 @@ aspectJ的官网上说：
 
 
 也就是凡是包含这三种概念的，都是AspectJ的风格。
+
+至于aspectJ的原理，其实也是基于JDK动态代理和cglib去实现的。
+
+
+
+
+
 
 
 

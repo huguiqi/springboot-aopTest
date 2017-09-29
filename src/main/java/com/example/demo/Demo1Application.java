@@ -43,27 +43,6 @@ public class Demo1Application {
         };
     }
 
-    @Bean
-    CommandLineRunner demo(CarMapper carMapper){
-    return args ->{
-
-        List<Car> cars = Arrays.asList(
-                new Car("劳斯莱斯", "ls-101", 2013, null),
-                new Car("别摸我", "bmw-102", 2014, null),
-                new Car("奔驰", "bc-111", 2012, null));
-
-        cars.forEach(car -> {
-            carMapper.insert(car);
-            System.out.println(car.toString());
-        });
-
-        System.out.println("---------------selectAll");
-        carMapper.selectAll().forEach(System.out:: println);
-        System.out.println("---------------search");
-        carMapper.search("别摸我",null).forEach(System.out::println);
-    };
-
-    }
 
 }
 
