@@ -127,8 +127,41 @@ aspectJ的官网上说：
 
 
 
+## spring AOP动态代理实现方式
+
+spring采用了两种动态代理去实现。根据可用性，首选jdk动态代理(接口的情况下)，jdk不满足时，会采用cglib实现。
 
 
+[AOP动态代理选用](https://docs.spring.io/spring/docs/4.3.12.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#aop-proxying)
 
+spring默认是用的这种方式。
+
+如果想直接使用cglib去实现动态代理的话，则需要在配置文件中配置这项(默认为false)：
+    
+    spring.aop.proxy-target-class=true
+
+## 如何使用
+
+### Join Point
+
+Join Point字面意思就是连接点，那什么是连接点呢？
+
+先来看看spring AOP中关于AspectJ的aop概念介绍：
+
+[官网介绍](https://docs.spring.io/spring/docs/4.3.12.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#aop-introduction-defn)
+
+
+>> Join point: a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
+
+简单说就是在程序执行的时候所表现的一个点。
+在spring中，join point总是表现在一个方法执行上。
+
+
+而Pointcut是用来匹配连接点的一个切面。
+
+>> Pointcut: a predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut (for example, the execution of a method with a certain name). The concept of join points as matched by pointcut expressions is central to AOP, and Spring uses the AspectJ pointcut expression language by default.
+
+**ps:
+Pointcut切入方法在被执行前会被目标方法所覆盖**
 
 
