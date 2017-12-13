@@ -162,6 +162,45 @@ Join Point字面意思就是连接点，那什么是连接点呢？
 >> Pointcut: a predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut (for example, the execution of a method with a certain name). The concept of join points as matched by pointcut expressions is central to AOP, and Spring uses the AspectJ pointcut expression language by default.
 
 **ps:
-Pointcut切入方法在被执行前会被目标方法所覆盖**
+Pointcut切入方法在被执行前会被代理方法(target source)所覆盖**
+
+
+## 翻译名词定义
+
+* target
+
+被代理目标对象
+
+* Join point
+
+连接点，连接被代理对象与代理对象的切入点，简单说就是对象的某个方法`method`
+
+* Pointcut
+
+切入点，简单来说就是写的拦截方法类，是在invoke方法里去加判断规则的。
+
+* Advice 通知方式，在这里是下面例子的`RetryAdvice`
+
+* target source
+
+就是最后生成的代理类源对象
+
+
+
+先来看看jdk动态代理的方式，需要给汽车加上记录开车时间的记录，则设计如下：
+
+
+![jdk](md/jdkdtdl.png)
+
+代码参考另一个专门介绍动态代理的项目：
+
+[daynmaicTest](https://github.com/huguiqi/dynamicproxytest.git)
+
+
+
+
+## 官方例子展示
+
+官方例子写的非常含蓄，现将例子重新整理一遍
 
 

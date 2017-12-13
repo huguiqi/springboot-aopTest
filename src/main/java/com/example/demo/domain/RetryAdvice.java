@@ -1,15 +1,19 @@
 package com.example.demo.domain;
 
-import org.aopalliance.aop.Advice;
 import org.springframework.aop.BeforeAdvice;
+import org.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
 
 /**
- * Created by guiqi on 2017/9/6.
+ * Created by guiqi on 2017/10/20.
  */
-public interface RetryAdvice extends BeforeAdvice {
+public class RetryAdvice implements MethodBeforeAdvice {
 
-    public void before(Object source, Object[] args, Method targetMethod);
-
+    @Override
+    public void before(Method method, Object[] objects, Object o) throws Throwable {
+        if (method.getName().equals("foo")){
+            System.out.println("check password");
+        }
+    }
 }
