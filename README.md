@@ -192,6 +192,12 @@ Pointcut切入方法在被执行前会被代理方法(target source)所覆盖**
 
 ![jdk](md/jdkdtdl.png)
 
+
+spring的动态代理方式：
+
+![jdk](md/springdtdl.png)
+
+
 代码参考另一个专门介绍动态代理的项目：
 
 [daynmaicTest](https://github.com/huguiqi/dynamicproxytest.git)
@@ -203,4 +209,70 @@ Pointcut切入方法在被执行前会被代理方法(target source)所覆盖**
 
 官方例子写的非常含蓄，现将例子重新整理一遍
 
+SimplePojo.java:
 
+    public class SimplePojo implements Pojo {
+
+        public void foo() {
+            // this next method invocation is a direct call on the 'this' reference
+            this.bar();
+        }
+    
+        public void bar() {
+            // some logic...
+        }
+    }
+
+
+
+Pojo.java:
+
+
+    public interface Pojo {
+    
+        public void foo();
+    
+        public void bar();
+    }
+    
+    
+    
+    
+RetryAdvice.java:    
+    
+    public class RetryAdvice implements MethodBeforeAdvice {
+    
+        @Override
+        public void before(Method method, Object[] objects, Object o) throws Throwable {
+            if (method.getName().equals("foo")){
+                System.out.println("check password");
+            }
+        }
+    }
+    
+
+### 使用方式
+
+SpringAopTest.java:
+    
+    
+    public class SpringAopTest {
+    
+    
+        @Test
+        public void testSpringAop(){
+            //1. 设置被代理对象(target)，而SimplePojo的foo方法就是切入点：Join Point
+            ProxyFactory factory = new ProxyFactory(new SimplePojo());
+            //2.将被代理对象的接口类添加进去(其实也可以不加,暂时还不清楚它有什么作用)
+    //        factory.addInterface(Pojo.class);
+            //3, 添加advice拦截,拦截中的before方法就是Pointcut
+            factory.addAdvice(new RetryAdvice());
+                //是否暴露被代理目标类
+            factory.setExposeProxy(true);//指定对外发布代理对象，即在目标对象方法中可以通过AopContext.currentProxy()访问当前代理对象。
+    //        Pojo pojo = (Pojo) factory.getProxy();
+            SimplePojo pojo = (SimplePojo) factory.getProxy();
+            // 这个连接点被调用时，就会调用代理类Proxy,pojo.foo()方法被调用前会被proxy的target source所覆盖(这里新的代理类名称(target source)是：SingletonTargetSource)
+            pojo.foo();
+        }
+    
+    }
