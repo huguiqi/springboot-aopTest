@@ -297,5 +297,8 @@ SpringAopTest.java:
  
  如果需要在方法上添加注解，则target的值是`METHOD`,加类上则值是`TYPE`
  
+ https://www.mkyong.com/java/java-custom-annotations-example/
  
+ 
+ http://blog.csdn.net/tianyaleixiaowu/article/details/73844568
  
