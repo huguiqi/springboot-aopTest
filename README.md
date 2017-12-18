@@ -276,3 +276,26 @@ SpringAopTest.java:
         }
     
     }
+    
+    
+    
+# 自定义注解
+
+例子，需要设计一个注解标签，用来检查当前方法是否有权限被用户访问
+
+## 固定写法
+
+* 必须是接口
+
+* 需要加上以下注解
+
+    
+    @Target({ElementType.METHOD})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+
+ 
+ 如果需要在方法上添加注解，则target的值是`METHOD`,加类上则值是`TYPE`
+ 
+ 
+ 
