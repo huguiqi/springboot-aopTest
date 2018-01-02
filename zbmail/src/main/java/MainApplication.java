@@ -5,6 +5,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Properties;
+
+import static org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL;
 
 /**
  * Created by guiqi on 2017/12/29.
@@ -23,62 +31,62 @@ public class MainApplication {
     private final static String MAIL_SERVER_HOST = "smtp.qiye.163.com";
     private final static String USER = "huguiqi@shanlinjinrong.com";
     private final static String PASSWORD = "MMHuguiqi_198838";
-    private final static String MAIL_FROM = "huguiqi@shanlinjinrong.com"; //å‘é€äºº
-    private final static String MAIL_TO = "guiqi.hu@163.com"; //æ”¶ä»¶äºº
-    private final static String MAIL_CC = "417980991@qq.com"; //æŠ„é€äºº
-    private final static String MAIL_BCC = ""; //å¯†é€äºº
+    private final static String MAIL_FROM = "huguiqi@shanlinjinrong.com"; //·¢ËÍÈË
+    private final static String MAIL_TO = "guiqi.hu@163.com"; //ÊÕ¼şÈË
+    private final static String MAIL_CC = "417980991@qq.com"; //³­ËÍÈË
+    private final static String MAIL_BCC = ""; //ÃÜËÍÈË
 
-//    public static void main(String[] args) throws Exception {
-//        Properties prop = new Properties();
-//        prop.setProperty("mail.debug", "true");
-//        prop.setProperty("mail.host", MAIL_SERVER_HOST);
-//        prop.setProperty("mail.transport.protocol", "smtp");
-//        prop.setProperty("mail.smtp.auth", "true");
-//        // 1ã€åˆ›å»ºsession
-//        Session session = Session.getInstance(prop);
-//        Transport ts = null;
-//        // 2ã€é€šè¿‡sessionå¾—åˆ°transportå¯¹è±¡
-//        ts = session.getTransport();
-//        // 3ã€è¿ä¸Šé‚®ä»¶æœåŠ¡å™¨
-//        ts.connect(MAIL_SERVER_HOST, USER, PASSWORD);
-//        // 4ã€åˆ›å»ºé‚®ä»¶
-//        MimeMessage message = new MimeMessage(session);
-//        // é‚®ä»¶æ¶ˆæ¯å¤´
-//        message.setFrom(new InternetAddress(MAIL_FROM)); // é‚®ä»¶çš„å‘ä»¶äºº
-//        message.addRecipient(Message.RecipientType.TO, new InternetAddress(MAIL_TO)); // é‚®ä»¶çš„æ”¶ä»¶äºº
-//        message.addRecipient(Message.RecipientType.CC, new InternetAddress(MAIL_CC)); // é‚®ä»¶çš„æŠ„é€äºº
-////        message.setRecipient(Message.RecipientType.BCC, new InternetAddress(MAIL_BCC)); // é‚®ä»¶çš„å¯†é€äºº
-//
-//        HashMap<String,String> map = givenMailContent();
-//        message.setSubject(map.get("title")); // é‚®ä»¶çš„æ ‡é¢˜
-//        // é‚®ä»¶æ¶ˆæ¯ä½“
-//        message.setText(map.get("text"));
-//        // 5ã€å‘é€é‚®ä»¶
-//        ts.sendMessage(message, message.getAllRecipients());
-//        ts.close();
-//
-//    }
+    public static void sendMail() throws Exception {
+        Properties prop = new Properties();
+        prop.setProperty("mail.debug", "true");
+        prop.setProperty("mail.host", MAIL_SERVER_HOST);
+        prop.setProperty("mail.transport.protocol", "smtp");
+        prop.setProperty("mail.smtp.auth", "true");
+        // 1¡¢´´½¨session
+        Session session = Session.getInstance(prop);
+        Transport ts = null;
+        // 2¡¢Í¨¹ısessionµÃµ½transport¶ÔÏó
+        ts = session.getTransport();
+        // 3¡¢Á¬ÉÏÓÊ¼ş·şÎñÆ÷
+        ts.connect(MAIL_SERVER_HOST, USER, PASSWORD);
+        // 4¡¢´´½¨ÓÊ¼ş
+        MimeMessage message = new MimeMessage(session);
+        // ÓÊ¼şÏûÏ¢Í·
+        message.setFrom(new InternetAddress(MAIL_FROM)); // ÓÊ¼şµÄ·¢¼şÈË
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(MAIL_TO)); // ÓÊ¼şµÄÊÕ¼şÈË
+        message.addRecipient(Message.RecipientType.CC, new InternetAddress(MAIL_CC)); // ÓÊ¼şµÄ³­ËÍÈË
+//        message.setRecipient(Message.RecipientType.BCC, new InternetAddress(MAIL_BCC)); // ÓÊ¼şµÄÃÜËÍÈË
+
+        HashMap<String,String> map = givenMailContent();
+        message.setSubject(map.get("title")); // ÓÊ¼şµÄ±êÌâ
+        // ÓÊ¼şÏûÏ¢Ìå
+        message.setText(map.get("text"));
+        // 5¡¢·¢ËÍÓÊ¼ş
+        ts.sendMessage(message, message.getAllRecipients());
+        ts.close();
+
+    }
 
 
     private static HashMap<String,String> givenMailContent(){
-        StringBuilder sb = new StringBuilder("ä½ å¥½ï¼Œ\n");
+        StringBuilder sb = new StringBuilder("ÄãºÃ£¬\n");
         Date todayDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyå¹´MMæœˆddæ—¥");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyÄêMMÔÂddÈÕ");
         sb.append("     ")
           .append(format.format(todayDate))
-          .append("çš„å‘¨å·¥ä½œæ€»ç»“è¯·è§é™„ä»¶ã€‚\n")
+          .append("µÄÖÜ¹¤×÷×Ü½áÇë¼û¸½¼ş¡£\n")
           .append("\n")
-          .append("è°¢è°¢ã€‚ã€‚ã€‚");
+          .append("Ğ»Ğ»¡£¡£¡£");
 
         HashMap<String,String> hashMap = new HashMap<String, String>();
         hashMap.put("text",sb.toString());
         format.applyPattern("yyyy-MM-dd");
-        hashMap.put("title","æŠ€æœ¯éƒ¨-èƒ¡æ¡‚ç¥å‘¨æŠ¥("+format.format(todayDate)+")");
+        hashMap.put("title","¼¼Êõ²¿-ºú¹ğÆîÖÜ±¨("+format.format(todayDate)+")");
         return hashMap;
     }
 
     /**
-     * è·å–é¡¹ç›®æ‰€åœ¨è·¯å¾„(åŒ…æ‹¬jar)
+     * »ñÈ¡ÏîÄ¿ËùÔÚÂ·¾¶(°üÀ¨jar)
      *
      * @return
      */
@@ -100,7 +108,7 @@ public class MainApplication {
     }
 
     /**
-     * è·å–é¡¹ç›®æ‰€åœ¨è·¯å¾„
+     * »ñÈ¡ÏîÄ¿ËùÔÚÂ·¾¶
      *
      * @return
      */
@@ -119,33 +127,33 @@ public class MainApplication {
     }
 
     public static String getAppPath(Class<?> cls) {
-        // æ£€æŸ¥ç”¨æˆ·ä¼ å…¥çš„å‚æ•°æ˜¯å¦ä¸ºç©º
+        // ¼ì²éÓÃ»§´«ÈëµÄ²ÎÊıÊÇ·ñÎª¿Õ
         if (cls == null)
-            throw new java.lang.IllegalArgumentException("å‚æ•°ä¸èƒ½ä¸ºç©ºï¼");
+            throw new java.lang.IllegalArgumentException("²ÎÊı²»ÄÜÎª¿Õ£¡");
 
         ClassLoader loader = cls.getClassLoader();
-        // è·å¾—ç±»çš„å…¨åï¼ŒåŒ…æ‹¬åŒ…å
+        // »ñµÃÀàµÄÈ«Ãû£¬°üÀ¨°üÃû
         String clsName = cls.getName();
-        // æ­¤å¤„ç®€å•åˆ¤å®šæ˜¯å¦æ˜¯JavaåŸºç¡€ç±»åº“ï¼Œé˜²æ­¢ç”¨æˆ·ä¼ å…¥JDKå†…ç½®çš„ç±»åº“
+        // ´Ë´¦¼òµ¥ÅĞ¶¨ÊÇ·ñÊÇJava»ù´¡Àà¿â£¬·ÀÖ¹ÓÃ»§´«ÈëJDKÄÚÖÃµÄÀà¿â
         if (clsName.startsWith("java.") || clsName.startsWith("javax.")) {
-            throw new java.lang.IllegalArgumentException("ä¸è¦ä¼ é€ç³»ç»Ÿç±»ï¼");
+            throw new java.lang.IllegalArgumentException("²»Òª´«ËÍÏµÍ³Àà£¡");
         }
-        // å°†ç±»çš„classæ–‡ä»¶å…¨åæ”¹ä¸ºè·¯å¾„å½¢å¼
+        // ½«ÀàµÄclassÎÄ¼şÈ«Ãû¸ÄÎªÂ·¾¶ĞÎÊ½
         String clsPath = clsName.replace(".", "/") + ".class";
 
-        // è°ƒç”¨ClassLoaderçš„getResourceæ–¹æ³•ï¼Œä¼ å…¥åŒ…å«è·¯å¾„ä¿¡æ¯çš„ç±»æ–‡ä»¶å
+        // µ÷ÓÃClassLoaderµÄgetResource·½·¨£¬´«Èë°üº¬Â·¾¶ĞÅÏ¢µÄÀàÎÄ¼şÃû
         java.net.URL url = loader.getResource(clsPath);
-        // ä»URLå¯¹è±¡ä¸­è·å–è·¯å¾„ä¿¡æ¯
+        // ´ÓURL¶ÔÏóÖĞ»ñÈ¡Â·¾¶ĞÅÏ¢
         String realPath = url.getPath();
-        // å»æ‰è·¯å¾„ä¿¡æ¯ä¸­çš„åè®®å"file:"
+        // È¥µôÂ·¾¶ĞÅÏ¢ÖĞµÄĞ­ÒéÃû"file:"
         int pos = realPath.indexOf("file:");
         if (pos > -1) {
             realPath = realPath.substring(pos + 5);
         }
-        // å»æ‰è·¯å¾„ä¿¡æ¯æœ€ååŒ…å«ç±»æ–‡ä»¶ä¿¡æ¯çš„éƒ¨åˆ†ï¼Œå¾—åˆ°ç±»æ‰€åœ¨çš„è·¯å¾„
+        // È¥µôÂ·¾¶ĞÅÏ¢×îºó°üº¬ÀàÎÄ¼şĞÅÏ¢µÄ²¿·Ö£¬µÃµ½ÀàËùÔÚµÄÂ·¾¶
         pos = realPath.indexOf(clsPath);
         realPath = realPath.substring(0, pos - 1);
-        // å¦‚æœç±»æ–‡ä»¶è¢«æ‰“åŒ…åˆ°JARç­‰æ–‡ä»¶ä¸­æ—¶ï¼Œå»æ‰å¯¹åº”çš„JARç­‰æ‰“åŒ…æ–‡ä»¶å
+        // Èç¹ûÀàÎÄ¼ş±»´ò°üµ½JARµÈÎÄ¼şÖĞÊ±£¬È¥µô¶ÔÓ¦µÄJARµÈ´ò°üÎÄ¼şÃû
         if (realPath.endsWith("!")) {
             realPath = realPath.substring(0, realPath.lastIndexOf("/"));
         }
@@ -158,12 +166,15 @@ public class MainApplication {
             throw new RuntimeException(e);
         }
         return realPath;
-    }// getAppPathå®šä¹‰ç»“æŸ
+    }// getAppPath¶¨Òå½áÊø
 
 
-    public static void main(String[] args) {
-
-            modifyZBExcel();
+    public static void main(String[] args) throws Exception {
+//        File source = new File(givenLastZBPath());
+//        File dest = new File(givenTodayZBPath());
+//        copyNewZBExcel(source,dest);
+        modifyZBExcel(args[0]);
+        sendMail();
     }
 
 
@@ -181,36 +192,39 @@ public class MainApplication {
         }
     }
 
-    private static void modifyZBExcel(){
+    private static void modifyZBExcel(String nextWeekPlan){
         try {
             File source = new File(givenLastZBPath());
-            File dest = new File(givenTodayZBPath());
-            //ä¼ å…¥çš„æ–‡ä»¶
-            FileInputStream fileInput = new FileInputStream(source);
-            //poiåŒ…ä¸‹çš„ç±»è¯»å–excelæ–‡ä»¶
+            //poi°üÏÂµÄÀà¶ÁÈ¡excelÎÄ¼ş
             Workbook workbook = new XSSFWorkbook(source);
             Sheet sheet = workbook.getSheetAt(0);
             String headCellValue = sheet.getRow(0).getCell(0).getStringCellValue();
-            String weekDayStr = headCellValue.indexOf("å–„æ—å®-æŠ€æœ¯   éƒ¨  ");
-            System.out.println(headCellValue);
-//            POIFSFileSystem ts = new POIFSFileSystem(fileInput);
-//            // åˆ›å»ºä¸€ä¸ªwebbookï¼Œå¯¹åº”ä¸€ä¸ªExcelæ–‡ä»¶
-//            HSSFWorkbook workbook = new HSSFWorkbook(ts);
-//            //å¯¹åº”Excelæ–‡ä»¶ä¸­çš„sheetï¼Œ0ä»£è¡¨ç¬¬ä¸€ä¸ª
-//            HSSFSheet sh = workbook.getSheetAt(0);
-//            //ä¿®æ”¹excleè¡¨çš„ç¬¬5è¡Œæ•°æ®
-//            for(int i=2;i<19;i++){
-//                //å¯¹ç¬¬äº”è¡Œçš„æ•°æ®ä¿®æ”¹
-//                sh.getRow(4).getCell((short)i).setCellValue(100210+i);
-//            }
-//            //å°†ä¿®æ”¹åçš„æ–‡ä»¶å†™å‡ºåˆ°D:\\excelç›®å½•ä¸‹
-//            FileOutputStream os = new FileOutputStream(dest);
-//            os.flush();
-//            //å°†Excelå†™å‡º
-//            workbook.write(os);
-//            //å…³é—­æµ
-//            fileInput.close();
-//            os.close();
+            int weekDayIndex = headCellValue.indexOf("²¿") + 2;
+            int lastWeekDayIndex = headCellValue.indexOf("¼°") + 2;
+            Integer currentWeekDay = new Integer(headCellValue.substring(weekDayIndex, weekDayIndex + 3).trim());
+            Integer lastWeekDay = new Integer(headCellValue.substring(lastWeekDayIndex, lastWeekDayIndex + 3).trim());
+           String replaceStr = headCellValue.replaceFirst(""+lastWeekDay,(lastWeekDay +1) + "").replaceFirst(""+currentWeekDay,(currentWeekDay +1)+"");
+
+           //È¡Öµ
+            String planWork = sheet.getRow(3).getCell(1).getStringCellValue();
+            String actWork = sheet.getRow(3).getCell(2).getStringCellValue();
+            String lastWeekPlanWork = sheet.getRow(11).getCell(1).getStringCellValue();
+            String zeRengReng = sheet.getRow(11).getCell(1).getStringCellValue();
+
+            //Ğ´ÈëÊı¾İ
+            sheet.getRow(0).getCell(0).setCellValue(replaceStr);
+            sheet.getRow(3).getCell(1).setCellValue(lastWeekPlanWork);
+            sheet.getRow(3).getCell(2).setCellValue(lastWeekPlanWork);
+            sheet.getRow(11).getCell(1).setCellValue(nextWeekPlan);
+            sheet.getRow(11).getCell(2).setCellValue(zeRengReng);
+
+            File dest = new File(givenTodayZBPath());
+            //½«ĞŞ¸ÄºóµÄÎÄ¼şĞ´³öµ½D:\\excelÄ¿Â¼ÏÂ
+            FileOutputStream os = new FileOutputStream(dest);
+            os.flush();
+            //½«ExcelĞ´³ö
+            workbook.write(os);
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,14 +234,15 @@ public class MainApplication {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH,-7);
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String path = getRealPath();
-        return path+"\\å‘¨å·¥ä½œæ€»ç»“åŠè®¡åˆ’è¡¨_å–„æ—å®_æŠ€æœ¯éƒ¨_èƒ¡æ¡‚ç¥_"+format.format(calendar.getTime()) +".xlsx";
+        String path = getProjectPath();
+//        return path+"\\ÖÜ¹¤×÷×Ü½á¼°¼Æ»®±í_ÉÆÁÖ±¦_¼¼Êõ²¿_ºú¹ğÆî_"+format.format(calendar.getTime()) +".xlsx";
+        return  path+"\\ÖÜ¹¤×÷×Ü½á¼°¼Æ»®±í_ÉÆÁÖ±¦_¼¼Êõ²¿_ºú¹ğÆî_20171222.xlsx";
     }
 
     private static String givenTodayZBPath(){
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String path = getRealPath();
-        return path+"\\å‘¨å·¥ä½œæ€»ç»“åŠè®¡åˆ’è¡¨_å–„æ—å®_æŠ€æœ¯éƒ¨_èƒ¡æ¡‚ç¥_"+format.format(calendar.getTime())+".xlsx";
+        String path = getProjectPath();
+        return path+"\\ÖÜ¹¤×÷×Ü½á¼°¼Æ»®±í_ÉÆÁÖ±¦_¼¼Êõ²¿_ºú¹ğÆî_"+format.format(calendar.getTime())+".xlsx";
     }
 }
