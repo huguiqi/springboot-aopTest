@@ -24,5 +24,8 @@ public class CheckPermissionImpl implements CheckPermission {
         return false;
     }
 
-
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return null;
+    }
 }
