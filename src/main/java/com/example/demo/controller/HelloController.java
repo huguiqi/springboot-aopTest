@@ -19,8 +19,8 @@ public class HelloController {
 
     @RequestMapping("/add")
     public String add() {
-
-        return "add success";
+        System.out.println("test");
+        return "add success aaa";
     }
 
 

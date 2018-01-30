@@ -205,6 +205,134 @@ spring的动态代理方式：
 
 
 
+# 自定义Aspect
+
+[官方aspect定义](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-at-aspectj)
+
+设计一个controller日志记录器，可以记录方法调用时和调用后的时间，参数，返回值等的日志记录。
+    
+设计类名为：OperationLogAspect
+    
+    
+    @Aspect
+    @Component
+    public class OperationLogAspect {
+    
+        //所有类的方法
+        @Pointcut("execution(public * com.example.demo.controller.*.*(..))")
+        private void allLogRecord(){
+            //这个方法体将会被aspectj切面监控的方法覆盖，实际不会被执行
+            System.out.println("allLogRecord.......");
+        }
+    
+        //前置通知，即被切入方法执行前衩执行
+        @Before("allLogRecord()")
+        private void doBefore(){
+            System.out.println("doBefore........");
+        }
+    
+        @After("allLogRecord()")
+        private void doAfter(){
+            System.out.println("doAfter......");
+        }
+    
+        //返回值
+        @AfterReturning(returning = "result",pointcut = "execution(public * com.example.demo.controller.*.*(..))")
+        private void doAfterReturn(Object result){
+            System.out.println("获取目标方法返回值:" + result);
+            //这种方式无法改变返回的值
+            System.out.println("模拟记录日志功能...");
+        }
+    }
+
+
+* 通知类型
+
+**@before**
+        
+    //前置通知，即被切入方法执行前衩执行
+    @Before("allLogRecord()")
+    private void doBefore(){
+        System.out.println("doBefore........");
+    }
+
+    
+* join point（连接点）
+
+切入点的显示表现就是allLogRecord()。
+
+* pointCut(切面)
+
+    
+    @Pointcut("execution(public * com.example.demo.controller.*.*(..))")
+
+这就是切面，被这个Aspect切入的方法平面。
+
+
+
+# spring AOP API
+
+上面使用@AspectJ的方式定义描述了Spring对AOP的支持。
+
+现在用spring 提供的aop API来实现对aop的支持与扩展
+
+[spring AOP API](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-api-introduction)
+
+spring AOP　API有以下几类：
+
+
+* Pointcut API
+
+    
+    public interface Pointcut {
+    
+        ClassFilter getClassFilter();
+    
+        MethodMatcher getMethodMatcher();
+    
+    }
+
+以两部分组成，
+
+1. ClassFilter getClassFilter();
+
+ClassFilter 接口用来约束切入点目标切入对象类型。
+
+2. MethodMatcher getMethodMatcher();
+
+如果ClassFilter 的matches方式返回为true,则对象目标匹配类型将会被匹配。
+
+* Advice API
+
+**Advice types in Spring**
+
+1. Interception around advice（拦截环绕通知）
+
+    
+    public interface MethodInterceptor extends Interceptor {
+    
+        Object invoke(MethodInvocation invocation) throws Throwable;
+    }
+
+eg:
+
+    public class DebugInterceptor implements MethodInterceptor {
+    
+        public Object invoke(MethodInvocation invocation) throws Throwable {
+            System.out.println("Before: invocation=[" + invocation + "]");
+            Object rval = invocation.proceed();
+            System.out.println("Invocation returned");
+            return rval;
+        }
+    }
+
+2. Before advice（前置通知）
+
+
+
+
+以上就是我们常说的拦截器。。。。。
+
 ## 官方例子展示
 
 官方例子写的非常含蓄，现将例子重新整理一遍
@@ -276,8 +404,11 @@ SpringAopTest.java:
         }
     
     }
+
     
-    
+
+
+
     
 # 自定义注解
 
@@ -297,8 +428,33 @@ SpringAopTest.java:
  
  如果需要在方法上添加注解，则target的值是`METHOD`,加类上则值是`TYPE`
  
+ 
+ 
+ 
+ 
  https://www.mkyong.com/java/java-custom-annotations-example/
  
  
  http://blog.csdn.net/tianyaleixiaowu/article/details/73844568
+ 
+ 
+ 
+ 
+ ## @AfterReturning
+ 
+ 使用@AfterReturning注解可指定如下两个常用属性。
+ 
+ 1)        pointcut/value:这两个属性的作用是一样的，它们都属于指定切入点对应的切入表达式。一样既可以是已有的切入点，也可直接定义切入点表达式。当指定了pointcut属性值后，value属性值将会被覆盖。
+ 
+ 2)        returning:该属性指定一个形参名，用于表示Advice方法中可定义与此同名的形参，该形参可用于访问目标方法的返回值。除此之外，在Advice方法中定义该形参（代表目标方法的返回值）时指定的类型，会限制目标方法必须返回指定类型的值或没有返回值。
+ 
+ 
+ ## 自定义Spring Advice
+ 
+ 
+ 
+ 
+ 
+
+ 
  

@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.domain.Pojo;
 import com.example.demo.domain.RetryAdvice;
 import com.example.demo.domain.SimplePojo;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.aop.framework.ProxyFactory;
 
@@ -10,6 +11,7 @@ import org.springframework.aop.framework.ProxyFactory;
  * Created by guiqi on 2017/10/20.
  */
 
+@Ignore
 public class SpringAopTest {
 
 
