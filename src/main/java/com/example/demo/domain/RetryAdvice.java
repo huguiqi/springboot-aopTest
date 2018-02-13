@@ -15,5 +15,6 @@ public class RetryAdvice implements MethodBeforeAdvice {
         if (method.getName().equals("foo")){
             System.out.println("check password");
         }
+        System.out.println(method.getName()+"before");
     }
 }

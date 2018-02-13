@@ -302,6 +302,33 @@ ClassFilter 接口用来约束切入点目标切入对象类型。
 
 如果ClassFilter 的matches方式返回为true,则对象目标匹配类型将会被匹配。
 
+
+
+## 如何使用
+
+>>Using the JdkRegexpMethodPointcut class, you can provide a list of pattern Strings. If any of these is a match, the pointcut will evaluate to true. (So the result is effectively the union of these pointcuts.)
+
+
+Spring官方为我们提供了一个基于正则表达式来匹配方法名的Pointcut，JdkRegexpMethodPointcut。该Pointcut是继承自StaticMethodMatcherPointcut的。我们在定义JdkRegexpMethodPointcut时可以通过patterns和excludedPatterns来注入需要满足和排除的正则表达式，它们对应的都是一个String[]。比如我们想匹配所有的方法名以find开头的方法，我们可以如下定义：
+
+    <bean id="regexPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+            <property name="patterns">
+                <list>
+                    <value>find.*</value><!-- 所有方法名以find开始的方法 -->
+                </list>
+            </property>
+    </bean>
+
+
+
+但是光这样配置是不起作用的，需要一个桥接类：DefaultPointcutAdvisor.java
+
+
+todo
+
+
+
+
 * Advice API
 
 **Advice types in Spring**
@@ -330,8 +357,9 @@ eg:
 
 
 
+3. Around advice
 
-以上就是我们常说的拦截器。。。。。
+注意，这个不是拦截器。。。。。
 
 ## 官方例子展示
 

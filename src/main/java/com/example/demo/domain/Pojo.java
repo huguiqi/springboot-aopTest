@@ -8,4 +8,6 @@ public interface Pojo {
     public void foo();
 
     public void bar();
+
+    public void findAll();
 }
